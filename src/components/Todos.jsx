@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Todos.css";
-const Todos = ({ removeTodo, todos, handleItemClick }) => {
+const Todos = ({style, removeTodo,setTodos, todos, handleItemClick }) => {
   const [filter, setFilter] = useState("all");
   const newTodos = todos.filter((todo) => {
     if (filter == "active") {
@@ -11,12 +11,16 @@ const Todos = ({ removeTodo, todos, handleItemClick }) => {
       return true;
     }
   });
+  const handleRemoveCompleted = () => {
+    const filteredTodos = todos.filter(todo => !todo.completed);
+    setTodos(filteredTodos);
+  };
   return (
     <>
       <ul className="todos">
         {newTodos.map((item, index) => (
-          <li key={index}>
-            <input
+          <li style={style} className={item.completed? "completed":""} key={index}>
+            <input  
               onClick={() => {
                 handleItemClick(item.id);
               }}
@@ -34,7 +38,7 @@ const Todos = ({ removeTodo, todos, handleItemClick }) => {
           </li>
         ))}
       </ul>
-      <div className="todos-footer">
+      <div style={style} className="todos-footer">
         <p className="todos-footer-left">{todos.length} items left</p>
         <p className="todos-footer-center">
           <span
@@ -56,7 +60,7 @@ const Todos = ({ removeTodo, todos, handleItemClick }) => {
             Completed
           </span>
         </p>
-        <p className="todos-footer-left">Clear Completed</p>
+        <p className="todos-footer-left" onClick={handleRemoveCompleted}>Clear Completed</p>
       </div>
     </>
   );
